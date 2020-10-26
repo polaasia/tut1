@@ -10,13 +10,10 @@ namespace tutorial_01
         public static async Task Main(string[] args)
         {
 
-            var url = @"http://www.pja.edu.pl/dziekanat";
-
             using (var httpClient = new HttpClient())
             {
 
-
-                using (var response = await httpClient.GetAsync(url))
+                using (var response = await httpClient.GetAsync(args[0]))
                 {
                     var content = await response.Content.ReadAsStringAsync();
 
@@ -25,7 +22,7 @@ namespace tutorial_01
 
                     var matches = regex.Matches(content);
 
-                    foreach (var match in matches) //foreach tab tab
+                    foreach (var match in matches) 
                     {
                         Console.WriteLine(match.ToString());
                     }
