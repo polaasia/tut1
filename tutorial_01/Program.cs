@@ -12,6 +12,9 @@ namespace tutorial_01
             HttpClient httpClient = new HttpClient();
             HttpResponseMessage response = await httpClient.GetAsync(args[0]);
 
+            if (response is null) {
+                throw new ArgumentNullException("null http, provide one");
+            }
 
             if(response.IsSuccessStatusCode)
             {
@@ -21,12 +24,22 @@ namespace tutorial_01
 
                 var matches = regex.Matches(content);
 
-                foreach (var match in matches)
-                {
-                    Console.WriteLine(match.ToString());
-                }
-            }
 
+                if (matches == null)
+                {
+                    Console.WriteLine("No email addresses found");
+                }
+                else
+                {
+                    foreach (var match in matches)
+                    {
+                        Console.WriteLine(match.ToString());
+                    }
+                }
+
+                
+            }
+            httpClient.Dispose();
         }
     }
 }
