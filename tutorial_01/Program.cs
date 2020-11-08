@@ -9,14 +9,23 @@ namespace tutorial_01
     {
         public static async Task Main(string[] args)
         {
-            HttpClient httpClient = new HttpClient();
-            HttpResponseMessage response = await httpClient.GetAsync(args[0]);
+            
 
-            if (response is null) {
+            if (args.Length == 0) {
                 throw new ArgumentNullException("null http, provide one");
             }
 
-            if(response.IsSuccessStatusCode)
+            bool result = Uri.TryCreate(args[0], UriKind.Absolute, out Uri uriResult) && (uriResult.Scheme == Uri.UriSchemeHttps || uriResult.Scheme == Uri.UriSchemeHttp);
+
+            if (!result) 
+            {
+                throw new ArgumentException("not correct uri");
+            }
+
+            HttpClient httpClient = new HttpClient();
+            HttpResponseMessage response = await httpClient.GetAsync(uriResult);
+
+            if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
 
@@ -39,6 +48,12 @@ namespace tutorial_01
 
                 
             }
+            else 
+            {
+                Console.WriteLine("error during GET request");
+
+            }
+            
             httpClient.Dispose();
         }
     }
